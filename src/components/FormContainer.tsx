@@ -1,128 +1,84 @@
-import { colors } from "@/styles/theme";
-import { Field, FormikErrors, FormikValues, useFormikContext } from "formik";
-import React from "react";
-import { Button, Input as RSInput } from "rsuite";
-import styled from "styled-components";
+import { colors } from '@/styles/theme'
+import { useFormikContext } from 'formik'
+import React, { FC, ReactElement } from 'react'
+import styled from 'styled-components'
+import Typography from './UI/Typography'
+import isEmpty from 'lodash/isEmpty'
+import Button from './UI/Button'
+import StepFormProvider from './Steps/StepFormProvider'
+import { stepTitleConfig } from '@/constants/constants'
 
-interface FormConfig {
-  label: string;
-  type: string;
-  name: "name" | "email" | "phone";
-  placeholder: string;
+interface FormContainerProps {
+    activeStep: number
+    setActiveStep: (p: number) => void
 }
 
 const Container = styled.div`
-  margin: 50px 90px auto 100px;
-`;
+    margin: 50px 90px 30px 100px;
+    width: 460px;
+    height: 520px;
+`
 
-const Title = styled.p`
-  font-family: "Ubuntu", sans-serif;
-  font-size: 30px;
-  font-weight: 700;
-  line-height: initial;
-  margin: 0px;
-`;
+const Form = styled.div``
 
-const Subtitle = styled.p`
-  font-family: "Ubuntu", sans-serif;
-  font-size: 16px;
-  font-weight: 400;
-  line-height: initial;
-  margin: 0px;
-  margin-top: 10px;
-  color: ${colors.coolGray};
-`;
+const ButtonsContainer = styled.div`
+    display: flex;
+    justify-content: space-between;
+    margin-top: 100px;
+    width: 100%;
+`
 
-const Form = styled.div``;
+const FormContainer: FC<FormContainerProps> = ({
+    activeStep,
+    setActiveStep,
+}) => {
+    const { errors, isValid, dirty } = useFormikContext()
 
-const Label = styled.div<{ error?: boolean }>`
-  font-family: "Ubuntu", sans-serif;
-  font-weight: 500;
-  line-height: 30px;
-  margin-top: 36px;
-  color: ${({ error }) => (!error ? colors.marineBlue : colors.strawberryRed)};
-`;
+    return (
+        <Container>
+            <Typography
+                fontSize="30px"
+                fontWeight={700}
+                style={{ margin: '0px' }}
+            >
+                {stepTitleConfig[activeStep].title}
+            </Typography>
+            <Typography
+                style={{
+                    margin: '0px',
+                    marginTop: '10px',
+                    color: colors.coolGray,
+                }}
+            >
+                {stepTitleConfig[activeStep].subtitle}
+            </Typography>
+            <Form>{StepFormProvider({ activeStep })}</Form>
+            <ButtonsContainer>
+                {activeStep > 1 && (
+                    <Button
+                        onClick={() => setActiveStep(activeStep - 1)}
+                        variant="subtle"
+                    >
+                        <Typography color={colors.marineBlue} fontWeight={500}>
+                            Go Back
+                        </Typography>
+                    </Button>
+                )}
+                <Button
+                    disabled={
+                        dirty ? !isValid && dirty && !isEmpty(errors) : true
+                    }
+                    onClick={() => setActiveStep(activeStep + 1)}
+                    variant="primary"
+                    style={{ marginLeft: 'auto' }}
+                >
+                    <Typography color={colors.white} fontWeight={500}>
+                        {activeStep !== 4 ? 'Next Step' : 'Confirm'}
+                    </Typography>
+                </Button>
+            </ButtonsContainer>
+        </Container>
+    )
+}
 
-const Input = styled(RSInput)`
-  &: hover {
-    border-color: ${colors.marineBlue};
-    border-shadow: none;
-  }
-
-  &: focus {
-    border-color: ${colors.marineBlue};
-    border-shadow: none;
-  }
-`;
-
-const LabelContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
-const formConfig: FormConfig[] = [
-  {
-    label: "Name",
-    type: "text",
-    name: "name",
-    placeholder: "e.g. Prichi",
-  },
-  {
-    label: "Email address",
-    type: "email",
-    name: "email",
-    placeholder: "e.g. prichi@email.com",
-  },
-  {
-    label: "Phone Number",
-    type: "text",
-    name: "phone",
-    placeholder: "e.g. +1 234 567 890",
-  },
-];
-
-const FormContainer = () => {
-  const { errors, values, setFieldValue, submitForm, touched, validateField } =
-    useFormikContext();
-  console.log({ errors, values, touched });
-
-  return (
-    <Container>
-      <Title>Personal info</Title>
-      <Subtitle>
-        Please provide your name, email address, and phone number.
-      </Subtitle>
-      <Form>
-        {formConfig.map((config) => (
-          <>
-            <LabelContainer>
-              <Label>{config.label}</Label>
-              {(errors as FormikErrors<FormikValues>)[config.name] && (
-                <Label error>
-                  {
-                    (errors as FormikErrors<FormikValues>)[
-                      config.name
-                    ] as string
-                  }
-                </Label>
-              )}
-            </LabelContainer>
-            <Field
-              type={config.type}
-              name={config.name}
-              placeholder={config.placeholder}
-              component={Input}
-              onChange={(value: FormikValues) => {
-                setFieldValue(config.name, value);
-                validateField(config.name);
-              }}
-            />
-          </>
-        ))}
-      </Form>
-      <Button onSubmit={submitForm}>Next Step</Button>
-    </Container>
-  );
-};
-
-export default FormContainer;
+export default FormContainer
