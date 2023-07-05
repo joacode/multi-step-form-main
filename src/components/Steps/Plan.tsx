@@ -1,57 +1,14 @@
-import React, { CSSProperties, useCallback, useState } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 import { colors } from '@/styles/theme'
 import Icon from '../UI/Icon'
 import Typography from '../UI/Typography'
 import { Grid, Toggle } from 'rsuite'
-import { IconType } from '@/models/models'
 import { FormikValues, useFormikContext } from 'formik'
-
-interface PlanConfig {
-    label: string
-    price: string
-    icon: IconType
-    name: 'arcade' | 'advanced' | 'pro'
-    margin: CSSProperties['margin']
-}
-
-const planConfig: PlanConfig[] = [
-    {
-        label: 'Arcade',
-        price: '$9/mo',
-        icon: 'arcade',
-        name: 'arcade',
-        margin: '0px 10px 0px 0px',
-    },
-    {
-        label: 'Advanced',
-        price: '$12/mo',
-        icon: 'advanced',
-        name: 'advanced',
-        margin: '0px 10px 0px 10px',
-    },
-    {
-        label: 'Pro',
-        price: '$15/mo',
-        icon: 'pro',
-        name: 'pro',
-        margin: '0px 0px 0px 10px',
-    },
-]
-
-const Card = styled.div<{ active: boolean }>`
-    width: 140px;
-    height: 160px;
-    border: 1px solid ${colors.purplishBlue};
-    border-radius: 10px;
-    padding: 20px 15px;
-    display: inline-block;
-    background: ${({ active }) => (!active ? colors.white : colors.magnolia)};
-
-    &: hover {
-        background: ${colors.magnolia};
-    }
-`
+import { planConfig } from '@/constants/constants'
+import Card from '../UI/Card'
+import { SubscriptionType } from '@/models/models'
+import { pricePerSelected } from '@/utils/utils'
 
 const ToggleContainer = styled.div`
     display: flex;
@@ -59,6 +16,7 @@ const ToggleContainer = styled.div`
     align-items: center;
     width: 100%;
     height: 45px;
+    max-height: fit-content;
     background: ${colors.magnolia};
     margin-bottom: 133px;
 `
@@ -68,14 +26,56 @@ const Plan = () => {
 
     const handleToggleChange = useCallback(
         (checked: boolean) => {
+            const plan = (values as FormikValues).plan
             if (checked) {
-                setFieldValue('subscriptionType', 'yearly')
+                if (plan.subscription === SubscriptionType.MONTHLY) {
+                    setFieldValue('plan', {
+                        name: plan.name,
+                        price: plan.price * 10,
+                        subscription: SubscriptionType.YEARLY,
+                    })
+                } else {
+                    setFieldValue('plan', {
+                        name: plan.name,
+                        price: plan.price,
+                        subscription: SubscriptionType.YEARLY,
+                    })
+                }
             } else {
-                setFieldValue('subscriptionType', 'monthly')
+                if (plan.subscription === SubscriptionType.YEARLY) {
+                    setFieldValue('plan', {
+                        name: plan.name,
+                        price: plan.price / 10,
+                        subscription: SubscriptionType.MONTHLY,
+                    })
+                } else {
+                    setFieldValue('plan', {
+                        name: plan.name,
+                        price: plan.price,
+                        subscription: SubscriptionType.MONTHLY,
+                    })
+                }
             }
         },
         [values]
     )
+
+    const yearly = useMemo(
+        () =>
+            (values as FormikValues).plan.subscription ===
+            SubscriptionType.YEARLY,
+        [values]
+    )
+
+    const handleChangeCard = (name: string, price: number) => {
+        setFieldValue('plan', {
+            name,
+            price: yearly ? price * 10 : price,
+            subscription: yearly
+                ? SubscriptionType.YEARLY
+                : SubscriptionType.MONTHLY,
+        })
+    }
 
     return (
         <>
@@ -85,20 +85,38 @@ const Plan = () => {
             >
                 {planConfig.map((config) => (
                     <Card
-                        style={{ margin: config.margin, cursor: 'pointer' }}
-                        onClick={() => setFieldValue('plan', config.name)}
-                        active={config.name === (values as FormikValues)?.plan}
+                        style={{ margin: config.margin }}
+                        onClick={() =>
+                            handleChangeCard(config.name, config.price)
+                        }
+                        active={
+                            config.name === (values as FormikValues)?.plan.name
+                        }
+                        key={`${config.name}-${config.price}`}
+                        yearly={yearly}
                     >
                         <Icon icon={config.icon} />
                         <Typography
                             fontWeight={500}
-                            style={{ marginTop: '42px' }}
+                            style={{ marginTop: '42px', marginBottom: '5px' }}
                         >
                             {config.label}
                         </Typography>
                         <Typography fontSize="14px" color={colors.coolGray}>
-                            {config.price}
+                            {pricePerSelected(
+                                (values as FormikValues).plan.subscription,
+                                yearly ? config.price * 10 : config.price
+                            )}
                         </Typography>
+                        {yearly && (
+                            <Typography
+                                fontSize="12px"
+                                color={colors.marineBlue}
+                                style={{ marginTop: '5px' }}
+                            >
+                                2 months free
+                            </Typography>
+                        )}
                     </Card>
                 ))}
             </Grid>
@@ -112,7 +130,8 @@ const Plan = () => {
                 </Typography>
                 <Toggle
                     defaultChecked={
-                        (values as FormikValues)?.subscriptionType === 'yearly'
+                        (values as FormikValues)?.plan.subscription ===
+                        SubscriptionType.YEARLY
                     }
                     onChange={handleToggleChange}
                 />

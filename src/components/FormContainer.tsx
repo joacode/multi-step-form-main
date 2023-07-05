@@ -1,6 +1,6 @@
 import { colors } from '@/styles/theme'
 import { useFormikContext } from 'formik'
-import React, { FC, ReactElement } from 'react'
+import React, { FC } from 'react'
 import styled from 'styled-components'
 import Typography from './UI/Typography'
 import isEmpty from 'lodash/isEmpty'
@@ -19,12 +19,15 @@ const Container = styled.div`
     height: 520px;
 `
 
-const Form = styled.div``
+const Form = styled.div`
+    height: 300px;
+    margin-top: 40px;
+`
 
 const ButtonsContainer = styled.div`
     display: flex;
     justify-content: space-between;
-    margin-top: 100px;
+    margin-top: 67px;
     width: 100%;
 `
 
@@ -44,15 +47,15 @@ const FormContainer: FC<FormContainerProps> = ({
                 {stepTitleConfig[activeStep].title}
             </Typography>
             <Typography
+                color={colors.coolGray}
                 style={{
                     margin: '0px',
                     marginTop: '10px',
-                    color: colors.coolGray,
                 }}
             >
                 {stepTitleConfig[activeStep].subtitle}
             </Typography>
-            <Form>{StepFormProvider({ activeStep })}</Form>
+            <Form>{StepFormProvider({ activeStep, setActiveStep })}</Form>
             <ButtonsContainer>
                 {activeStep > 1 && (
                     <Button

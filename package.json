@@ -17,6 +17,7 @@
     "next": "13.4.8",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-responsive": "^9.0.2",
     "rsuite": "^5.36.0",
     "styled-components": "^6.0.2",
     "yup": "^1.2.0"

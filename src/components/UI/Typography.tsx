@@ -1,41 +1,50 @@
-import { colors } from "@/styles/theme";
-import React, { CSSProperties, PropsWithChildren } from "react";
-import styled from "styled-components";
+import { colors } from '@/styles/theme'
+import React, { CSSProperties, PropsWithChildren } from 'react'
+import styled from 'styled-components'
 
 interface TypographyProps extends PropsWithChildren {
-  color?: CSSProperties["color"];
-  fontSize?: string;
-  fontWeight?: number;
-  lineHeight?: string;
-  style?: CSSProperties;
+    color?: CSSProperties['color']
+    fontSize?: string
+    fontWeight?: number
+    lineHeight?: string
+    style?: CSSProperties
+    onClick?: () => void
+    onMouseEnter?: () => void
+    onMouseLeave?: () => void
 }
 const Container = styled.div<TypographyProps>`
-  font-family: "Ubuntu", sans-serif;
-  font-size: ${({ fontSize }) => fontSize ?? "16px"};
-  font-weight: ${({ fontWeight }) => fontWeight ?? 400};
-  line-height: ${({ lineHeight }) => lineHeight ?? "initial"};
-  color: ${({ color }) => color ?? colors.marineBlue};
-`;
+    font-family: 'Ubuntu', sans-serif;
+    font-size: ${({ fontSize }) => fontSize ?? '16px'};
+    font-weight: ${({ fontWeight }) => fontWeight ?? 400};
+    line-height: ${({ lineHeight }) => lineHeight ?? 'initial'};
+    color: ${({ color }) => color ?? colors.marineBlue};
+`
 
 const Typography = ({
-  color,
-  fontSize,
-  fontWeight,
-  lineHeight,
-  style,
-  children,
+    color,
+    fontSize,
+    fontWeight,
+    lineHeight,
+    style,
+    children,
+    onClick,
+    onMouseEnter,
+    onMouseLeave,
 }: TypographyProps) => {
-  return (
-    <Container
-      color={color}
-      fontSize={fontSize}
-      fontWeight={fontWeight}
-      lineHeight={lineHeight}
-      style={style}
-    >
-      {children}
-    </Container>
-  );
-};
+    return (
+        <Container
+            color={color}
+            fontSize={fontSize}
+            fontWeight={fontWeight}
+            lineHeight={lineHeight}
+            style={style}
+            onClick={onClick}
+            onMouseEnter={onMouseEnter}
+            onMouseLeave={onMouseLeave}
+        >
+            {children}
+        </Container>
+    )
+}
 
-export default Typography;
+export default Typography

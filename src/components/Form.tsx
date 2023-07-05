@@ -7,12 +7,14 @@ import { Formik } from 'formik'
 import * as Yup from 'yup'
 import StepContainer from './Steps/StepContainer'
 import { stepContainerConfig } from '@/constants/constants'
+import { SubscriptionType } from '@/models/models'
+import Greetings from './Steps/Greetings'
 
 const Container = styled(RSGrid)`
     width: 940px;
     height: 600px;
     margin: auto;
-    margin-top: 100px;
+    margin-top: 10%;
     border-radius: 20px;
     display: flex;
     background: ${colors.white};
@@ -34,8 +36,8 @@ const initialValues = {
     name: undefined,
     email: undefined,
     phone: undefined,
-    plan: undefined,
-    subscriptionType: undefined,
+    plan: { name: 'arcade', price: 9, subscription: SubscriptionType.MONTHLY },
+    addOns: [],
 }
 
 const ValidationSchema = Yup.object().shape({
@@ -44,7 +46,7 @@ const ValidationSchema = Yup.object().shape({
     phone: Yup.number().required('This field is required.'),
 })
 
-const Card = () => {
+const Form = () => {
     const [activeStep, setActiveStep] = useState(1)
 
     return (
@@ -55,7 +57,8 @@ const Card = () => {
                         <StepContainer
                             stepNumber={config.stepNumber}
                             label={config.label}
-                            activeStep={activeStep}
+                            activeStep={activeStep < 4 ? activeStep : 4}
+                            key={`${config.label}-${config.stepNumber}`}
                         />
                     ))}
                 </div>
@@ -70,17 +73,21 @@ const Card = () => {
                     setActiveStep(activeStep + 1)
                 }}
             >
-                {({ handleSubmit }) => (
-                    <form onSubmit={handleSubmit}>
-                        <FormContainer
-                            activeStep={activeStep}
-                            setActiveStep={setActiveStep}
-                        />
-                    </form>
-                )}
+                {({ handleSubmit }) =>
+                    activeStep < 5 ? (
+                        <form onSubmit={handleSubmit}>
+                            <FormContainer
+                                activeStep={activeStep}
+                                setActiveStep={setActiveStep}
+                            />
+                        </form>
+                    ) : (
+                        <Greetings />
+                    )
+                }
             </Formik>
         </Container>
     )
 }
 
-export default Card
+export default Form

@@ -1,4 +1,10 @@
-import { FormConfig, StepTitleConfig } from '@/models/models'
+import {
+    AddOnType,
+    AddOnsConfig,
+    FormConfig,
+    PlanConfig,
+    StepTitleConfig,
+} from '@/models/models'
 
 export const stepContainerConfig = [
     {
@@ -56,5 +62,50 @@ export const infoConfig: FormConfig[] = [
         type: 'text',
         name: 'phone',
         placeholder: 'e.g. +1 234 567 890',
+    },
+]
+
+export const planConfig: PlanConfig[] = [
+    {
+        label: 'Arcade',
+        price: 9,
+        icon: 'arcade',
+        name: 'arcade',
+        margin: '0px 10px 0px 0px',
+    },
+    {
+        label: 'Advanced',
+        price: 12,
+        icon: 'advanced',
+        name: 'advanced',
+        margin: '0px 10px 0px 10px',
+    },
+    {
+        label: 'Pro',
+        price: 15,
+        icon: 'pro',
+        name: 'pro',
+        margin: '0px 0px 0px 10px',
+    },
+]
+
+export const addOnsConfig: AddOnsConfig[] = [
+    {
+        title: 'Online Service',
+        subtitle: 'Access to multiplayer games',
+        price: 1,
+        name: AddOnType.ONLINE_SERVICE,
+    },
+    {
+        title: 'Larger storage',
+        subtitle: 'Extra 1TB of cloud save',
+        price: 2,
+        name: AddOnType.LARGER_STORAGE,
+    },
+    {
+        title: 'Customizable Profile',
+        subtitle: 'Custom theme on your profile',
+        price: 2,
+        name: AddOnType.CUSTOMIZABLE_PROFILE,
     },
 ]

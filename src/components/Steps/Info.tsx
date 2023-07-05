@@ -27,24 +27,20 @@ const Info: FC = () => {
     const { errors, setFieldValue, validateField, values } = useFormikContext()
 
     return infoConfig.map((config) => (
-        <>
+        <div
+            style={{
+                marginBottom: '25px',
+            }}
+            key={`${config.label}-${config.type}`}
+        >
             <LabelContainer>
-                <Typography
-                    fontWeight={500}
-                    lineHeight="30px"
-                    style={{
-                        marginTop: '36px',
-                    }}
-                >
+                <Typography fontWeight={500} lineHeight="30px">
                     {config.label}
                 </Typography>
                 {(errors as FormikErrors<FormikValues>)[config.name] && (
                     <Typography
                         fontWeight={500}
                         lineHeight="30px"
-                        style={{
-                            marginTop: '36px',
-                        }}
                         color={colors.strawberryRed}
                     >
                         {
@@ -66,7 +62,7 @@ const Info: FC = () => {
                     validateField(config.name)
                 }}
             />
-        </>
+        </div>
     ))
 }
 
