@@ -1,5 +1,5 @@
-import { IconType } from '@/models/models'
 import React, { CSSProperties, FC } from 'react'
+import { IconType } from '../../models'
 
 interface IconProps {
     icon: IconType

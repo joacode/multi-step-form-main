@@ -1,14 +1,14 @@
-import React, { useCallback, useMemo } from 'react'
+import React, { ReactElement, useCallback, useMemo } from 'react'
 import styled from 'styled-components'
-import { colors } from '@/styles/theme'
-import Icon from '../UI/Icon'
-import Typography from '../UI/Typography'
 import { Grid, Toggle } from 'rsuite'
 import { FormikValues, useFormikContext } from 'formik'
-import { planConfig } from '@/constants/constants'
+import { colors } from '../../styles/theme'
+import Icon from '../UI/Icon'
+import Typography from '../UI/Typography'
+import { planConfig } from '../../constants'
 import Card from '../UI/Card'
-import { SubscriptionType } from '@/models/models'
-import { pricePerSelected } from '@/utils/utils'
+import { SubscriptionType } from '../../models'
+import { pricePerSelected } from '../../utils'
 
 const ToggleContainer = styled.div`
     display: flex;
@@ -21,12 +21,12 @@ const ToggleContainer = styled.div`
     margin-bottom: 133px;
 `
 
-const Plan = () => {
+const Plan = (): ReactElement => {
     const { setFieldValue, values } = useFormikContext()
 
     const handleToggleChange = useCallback(
         (checked: boolean) => {
-            const plan = (values as FormikValues).plan
+            const { plan } = values as FormikValues
             if (checked) {
                 if (plan.subscription === SubscriptionType.MONTHLY) {
                     setFieldValue('plan', {
@@ -41,20 +41,18 @@ const Plan = () => {
                         subscription: SubscriptionType.YEARLY,
                     })
                 }
+            } else if (plan.subscription === SubscriptionType.YEARLY) {
+                setFieldValue('plan', {
+                    name: plan.name,
+                    price: plan.price / 10,
+                    subscription: SubscriptionType.MONTHLY,
+                })
             } else {
-                if (plan.subscription === SubscriptionType.YEARLY) {
-                    setFieldValue('plan', {
-                        name: plan.name,
-                        price: plan.price / 10,
-                        subscription: SubscriptionType.MONTHLY,
-                    })
-                } else {
-                    setFieldValue('plan', {
-                        name: plan.name,
-                        price: plan.price,
-                        subscription: SubscriptionType.MONTHLY,
-                    })
-                }
+                setFieldValue('plan', {
+                    name: plan.name,
+                    price: plan.price,
+                    subscription: SubscriptionType.MONTHLY,
+                })
             }
         },
         [values]
@@ -67,7 +65,7 @@ const Plan = () => {
         [values]
     )
 
-    const handleChangeCard = (name: string, price: number) => {
+    const handleChangeCard = (name: string, price: number): void => {
         setFieldValue('plan', {
             name,
             price: yearly ? price * 10 : price,
@@ -81,12 +79,17 @@ const Plan = () => {
         <>
             <Grid
                 fluid
-                style={{ padding: 0, marginTop: '36px', marginBottom: '30px' }}
+                style={{
+                    padding: 0,
+                    marginTop: '36px',
+                    marginBottom: '30px',
+                    width: 'max-content',
+                }}
             >
-                {planConfig.map((config) => (
+                {planConfig.map(config => (
                     <Card
                         style={{ margin: config.margin }}
-                        onClick={() =>
+                        onClick={(): void =>
                             handleChangeCard(config.name, config.price)
                         }
                         active={

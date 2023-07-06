@@ -7,19 +7,15 @@ import { useMediaQuery } from 'react-responsive'
 enum Device {
     DESKTOP = 'DESKTOP',
     MOBILE = 'MOBILE',
-    TABLET = 'TABLET',
 }
 
 enum DEVICE_SIZE {
     MIN_DESKTOP = '992px',
-    MAX_MOBILE = '768px',
-    MIN_TABLET = '768px',
-    MAX_TABLET = '991px',
+    MAX_MOBILE = '576px',
 }
 
 interface HooksDeviceResp {
     device?: Device
-    isTablet: boolean
     isDesktop: boolean
     isMobile: boolean
 }
@@ -29,21 +25,17 @@ interface HooksDeviceResp {
  */
 
 export const useDeviceDetect = (): HooksDeviceResp => {
-    // { query: `(max-width: ${DEVICE_SIZE.MAX_MOBILE})` }
     const isMobile = useMediaQuery({
         query: `(max-width: ${DEVICE_SIZE.MAX_MOBILE})`,
     })
-    const isTablet = useMediaQuery({
-        query: `(min-width: ${DEVICE_SIZE.MIN_TABLET}) and (max-width: ${DEVICE_SIZE.MAX_TABLET})`,
-    })
-    const isDesktop = !isMobile && !isTablet
 
-    const mobileTabletHandler = isTablet ? Device.TABLET : Device.MOBILE
+    const isDesktop = useMediaQuery({
+        query: `(min-width: ${DEVICE_SIZE.MIN_DESKTOP})`,
+    })
 
     return {
-        isMobile: isMobile && !isTablet,
-        isTablet,
+        isMobile,
         isDesktop,
-        device: isDesktop ? Device.DESKTOP : mobileTabletHandler,
+        device: isDesktop ? Device.DESKTOP : Device.MOBILE,
     }
 }

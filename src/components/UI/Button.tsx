@@ -6,7 +6,7 @@ import React, {
 } from 'react'
 import styled from 'styled-components'
 import { Button as RSButton } from 'rsuite'
-import { theme } from '@/styles/theme'
+import { theme } from '../../styles/theme'
 
 interface ButtonProps extends PropsWithChildren {
     variant: 'primary' | 'subtle'
@@ -19,23 +19,27 @@ const Container = styled(RSButton)<ButtonProps>`
     display: block;
     width: 125px;
     height: 50px;
-    background: ${({ variant }) => theme.button.variant[variant].background};
-    color: ${({ variant }) => theme.button.variant[variant].color};
+    background: ${({ variant }): string =>
+        theme.button.variant[variant].background};
+    color: ${({ variant }): string => theme.button.variant[variant].color};
 
     &:hover {
-        background: ${({ variant }) => theme.button.variant[variant].hover};
+        background: ${({ variant }): string =>
+            theme.button.variant[variant].hover};
     }
 
     &:focus {
-        background: ${({ variant }) => theme.button.variant[variant].hover};
+        background: ${({ variant }): string =>
+            theme.button.variant[variant].hover};
     }
 
     &:active {
-        background: ${({ variant }) => theme.button.variant[variant].hover};
+        background: ${({ variant }): string =>
+            theme.button.variant[variant].hover};
     }
 
     &:disabled {
-        background: ${({ variant }) =>
+        background: ${({ variant }): string =>
             theme.button.variant[variant].background};
     }
 `

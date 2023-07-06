@@ -1,11 +1,11 @@
-import { colors } from '@/styles/theme'
 import React, { FC, useMemo, useState } from 'react'
 import styled from 'styled-components'
-import Typography from '../UI/Typography'
 import { FormikValues, useFormikContext } from 'formik'
 import capitalize from 'lodash/capitalize'
-import { AddOn, SubscriptionType } from '@/models/models'
-import { pricePerSelected } from '@/utils/utils'
+import Typography from '../UI/Typography'
+import { colors } from '../../styles/theme'
+import { AddOn, SubscriptionType } from '../../models'
+import { pricePerSelected } from '../../utils'
 
 interface SummaryProps {
     activeStep: number

@@ -1,6 +1,6 @@
-import { colors } from '@/styles/theme'
-import React from 'react'
+import React, { ReactElement } from 'react'
 import styled from 'styled-components'
+import { colors } from '../styles/theme'
 import Form from './Form'
 
 const Grid = styled.div`
@@ -12,7 +12,7 @@ const Grid = styled.div`
     background: ${colors.magnolia};
 `
 
-const Layout = () => {
+const Layout = (): ReactElement => {
     return (
         <Grid>
             <Form />

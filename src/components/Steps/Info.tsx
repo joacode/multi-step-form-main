@@ -1,10 +1,10 @@
-import { colors } from '@/styles/theme'
 import { Field, FormikErrors, FormikValues, useFormikContext } from 'formik'
 import React, { FC } from 'react'
 import { Input as RSInput } from 'rsuite'
 import styled from 'styled-components'
+import { colors } from '../../styles/theme'
 import Typography from '../UI/Typography'
-import { infoConfig } from '@/constants/constants'
+import { infoConfig } from '../../constants'
 
 const Input = styled(RSInput)`
     &: hover {
@@ -26,7 +26,7 @@ const LabelContainer = styled.div`
 const Info: FC = () => {
     const { errors, setFieldValue, validateField, values } = useFormikContext()
 
-    return infoConfig.map((config) => (
+    return infoConfig.map(config => (
         <div
             style={{
                 marginBottom: '25px',
@@ -57,7 +57,7 @@ const Info: FC = () => {
                 name={config.name}
                 placeholder={config.placeholder}
                 component={Input}
-                onChange={(value: FormikValues) => {
+                onChange={(value: FormikValues): void => {
                     setFieldValue(config.name, value)
                     validateField(config.name)
                 }}

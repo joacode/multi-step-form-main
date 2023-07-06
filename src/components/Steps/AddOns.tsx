@@ -1,13 +1,13 @@
-import React, { useCallback, useEffect } from 'react'
-import Card from '../UI/Card'
-import Typography from '../UI/Typography'
+import React, { ReactElement, useCallback, useEffect } from 'react'
 import { Checkbox } from 'rsuite'
 import styled from 'styled-components'
-import { colors } from '@/styles/theme'
 import { FormikValues, useFormikContext } from 'formik'
-import { AddOn, AddOnsConfig, SubscriptionType } from '@/models/models'
-import { addOnsConfig } from '@/constants/constants'
-import { pricePerSelected } from '@/utils/utils'
+import Card from '../UI/Card'
+import Typography from '../UI/Typography'
+import { colors } from '../../styles/theme'
+import { AddOn, AddOnsConfig, SubscriptionType } from '../../models'
+import { addOnsConfig } from '../../constants'
+import { pricePerSelected } from '../../utils'
 
 const Container = styled.div`
     display: flex;    
@@ -16,7 +16,7 @@ const Container = styled.div`
 }
 `
 
-const AddOns = () => {
+const AddOns = (): ReactElement => {
     const { values, setFieldValue } = useFormikContext()
 
     const price = (config: AddOnsConfig | AddOn): number =>
@@ -26,14 +26,14 @@ const AddOns = () => {
 
     const handleClickCard = useCallback(
         (addOn: AddOn) => {
-            let addOns: AddOn[] = (values as FormikValues).addOns
+            let { addOns } = values as FormikValues
 
             if (
                 (values as FormikValues).addOns.find(
                     (a: AddOn) => a.name === addOn.name
                 ) !== undefined
             ) {
-                addOns = addOns.filter((a) => a.name !== addOn.name)
+                addOns = addOns.filter(a => a.name !== addOn.name)
             } else {
                 addOns.push(addOn)
             }
@@ -74,7 +74,7 @@ const AddOns = () => {
 
     return (
         <div style={{ marginTop: '30px' }}>
-            {addOnsConfig.map((config) => (
+            {addOnsConfig.map(config => (
                 <Card
                     active={(values as FormikValues).addOns.includes(
                         config.name
@@ -85,7 +85,7 @@ const AddOns = () => {
                         marginTop: '10px',
                         marginBottom: '10px',
                     }}
-                    onClick={() =>
+                    onClick={(): void =>
                         handleClickCard({
                             name: config.name,
                             price: price(config),

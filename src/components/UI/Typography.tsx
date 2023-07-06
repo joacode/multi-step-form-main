@@ -1,6 +1,11 @@
-import { colors } from '@/styles/theme'
-import React, { CSSProperties, PropsWithChildren } from 'react'
+import React, {
+    CSSProperties,
+    FC,
+    PropsWithChildren,
+    ReactElement,
+} from 'react'
 import styled from 'styled-components'
+import { colors } from '../../styles/theme'
 
 interface TypographyProps extends PropsWithChildren {
     color?: CSSProperties['color']
@@ -14,13 +19,13 @@ interface TypographyProps extends PropsWithChildren {
 }
 const Container = styled.div<TypographyProps>`
     font-family: 'Ubuntu', sans-serif;
-    font-size: ${({ fontSize }) => fontSize ?? '16px'};
-    font-weight: ${({ fontWeight }) => fontWeight ?? 400};
-    line-height: ${({ lineHeight }) => lineHeight ?? 'initial'};
-    color: ${({ color }) => color ?? colors.marineBlue};
+    font-size: ${({ fontSize }): string => fontSize ?? '16px'};
+    font-weight: ${({ fontWeight }): string => fontWeight ?? 400};
+    line-height: ${({ lineHeight }): string => lineHeight ?? 'initial'};
+    color: ${({ color }): string => color ?? colors.marineBlue};
 `
 
-const Typography = ({
+const Typography: FC<TypographyProps> = ({
     color,
     fontSize,
     fontWeight,
@@ -30,7 +35,7 @@ const Typography = ({
     onClick,
     onMouseEnter,
     onMouseLeave,
-}: TypographyProps) => {
+}): ReactElement => {
     return (
         <Container
             color={color}

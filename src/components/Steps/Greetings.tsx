@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { ReactElement } from 'react'
 import styled from 'styled-components'
 import Typography from '../UI/Typography'
 import Icon from '../UI/Icon'
-import { colors } from '@/styles/theme'
+import { colors } from '../../styles/theme'
 
 const Background = styled.div`
     width: 100%;
@@ -14,7 +14,7 @@ const Background = styled.div`
 
 const Container = styled.div``
 
-const Greetings = () => {
+const Greetings = (): ReactElement => {
     return (
         <Background>
             <Container>

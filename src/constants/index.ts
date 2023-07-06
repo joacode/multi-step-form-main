@@ -4,7 +4,7 @@ import {
     FormConfig,
     PlanConfig,
     StepTitleConfig,
-} from '@/models/models'
+} from '../models'
 
 export const stepContainerConfig = [
     {

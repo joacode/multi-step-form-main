@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import Info from './Info'
 import Plan from './Plan'
-import { FormComponents } from '@/models/models'
+import { FormComponents } from '../../models'
 import AddOns from './AddOns'
 import Summary from './Summary'
 

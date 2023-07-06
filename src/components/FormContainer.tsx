@@ -1,12 +1,12 @@
-import { colors } from '@/styles/theme'
 import { useFormikContext } from 'formik'
 import React, { FC } from 'react'
 import styled from 'styled-components'
-import Typography from './UI/Typography'
 import isEmpty from 'lodash/isEmpty'
+import Typography from './UI/Typography'
+import { colors } from '../styles/theme'
 import Button from './UI/Button'
 import StepFormProvider from './Steps/StepFormProvider'
-import { stepTitleConfig } from '@/constants/constants'
+import { stepTitleConfig } from '../constants'
 
 interface FormContainerProps {
     activeStep: number
@@ -15,7 +15,7 @@ interface FormContainerProps {
 
 const Container = styled.div`
     margin: 50px 90px 30px 100px;
-    width: 460px;
+    max-width: 460px;
     height: 520px;
 `
 
@@ -59,7 +59,7 @@ const FormContainer: FC<FormContainerProps> = ({
             <ButtonsContainer>
                 {activeStep > 1 && (
                     <Button
-                        onClick={() => setActiveStep(activeStep - 1)}
+                        onClick={(): void => setActiveStep(activeStep - 1)}
                         variant="subtle"
                     >
                         <Typography color={colors.marineBlue} fontWeight={500}>
@@ -71,7 +71,7 @@ const FormContainer: FC<FormContainerProps> = ({
                     disabled={
                         dirty ? !isValid && dirty && !isEmpty(errors) : true
                     }
-                    onClick={() => setActiveStep(activeStep + 1)}
+                    onClick={(): void => setActiveStep(activeStep + 1)}
                     variant="primary"
                     style={{ marginLeft: 'auto' }}
                 >

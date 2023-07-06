@@ -1,6 +1,6 @@
-import { colors } from '@/styles/theme'
 import React, { FC } from 'react'
-import { styled } from 'styled-components'
+import styled from 'styled-components'
+import { colors } from '../../styles/theme'
 import Typography from '../UI/Typography'
 
 interface StepContainerProps {
@@ -30,9 +30,10 @@ const StepNumber = styled.div<{ isActive: boolean }>`
     align-items: center;
     font-size: 16px;
     font-weight: 700;
-    background: ${({ isActive }) =>
+    background: ${({ isActive }): string =>
         isActive ? colors.lightBlue : 'transparent'};
-    color: ${({ isActive }) => (isActive ? colors.marineBlue : colors.white)};
+    color: ${({ isActive }): string =>
+        isActive ? colors.marineBlue : colors.white};
 `
 
 const StepContainer: FC<StepContainerProps> = ({
