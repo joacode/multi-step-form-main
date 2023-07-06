@@ -1,44 +1,71 @@
-import { useFormikContext } from 'formik'
 import React, { FC } from 'react'
 import styled from 'styled-components'
-import isEmpty from 'lodash/isEmpty'
+import { useDeviceDetect } from 'src/hooks/useDeviceDetect'
+import { MobileProps, SubscriptionType } from 'src/models'
+import { FormikValues, useFormikContext } from 'formik'
 import Typography from './UI/Typography'
 import { colors } from '../styles/theme'
-import Button from './UI/Button'
 import StepFormProvider from './Steps/StepFormProvider'
 import { stepTitleConfig } from '../constants'
+import ButtonsContainer from './UI/ButtonsContainer'
 
 interface FormContainerProps {
     activeStep: number
     setActiveStep: (p: number) => void
 }
 
-const Container = styled.div`
-    margin: 50px 90px 30px 100px;
+type MobileAndStep = MobileProps & {
+    activeStep?: number
+    addOnsLength?: number
+    subscriptionType?: SubscriptionType
+}
+
+const Container = styled.div<MobileAndStep>`
+    margin: ${({ isMobile }): string =>
+        !isMobile ? '50px 90px 30px 100px' : '35px 25px'};
     max-width: 460px;
-    height: 520px;
+    ${({ isMobile, activeStep, addOnsLength, subscriptionType }): string => {
+        if (isMobile) {
+            if (activeStep === 1) {
+                return 'height: 330px;'
+            }
+            if (activeStep === 2) {
+                if (subscriptionType === SubscriptionType.YEARLY) {
+                    return 'height: 670px;'
+                }
+                return 'height: 520px;'
+            }
+            if (activeStep === 3) {
+                return 'height: 400px;'
+            }
+            if (activeStep === 4) {
+                const height = 240 + addOnsLength * 40
+                return `height: ${height}px;`
+            }
+        }
+        return 'height: 520px;'
+    }}
 `
 
-const Form = styled.div`
+const Form = styled.div<MobileProps>`
     height: 300px;
-    margin-top: 40px;
-`
-
-const ButtonsContainer = styled.div`
-    display: flex;
-    justify-content: space-between;
-    margin-top: 67px;
-    width: 100%;
+    margin-top: ${({ isMobile }): string => (!isMobile ? '40px' : '15px')};
 `
 
 const FormContainer: FC<FormContainerProps> = ({
     activeStep,
     setActiveStep,
 }) => {
-    const { errors, isValid, dirty } = useFormikContext()
+    const { values } = useFormikContext()
+    const { isMobile } = useDeviceDetect()
 
     return (
-        <Container>
+        <Container
+            isMobile={isMobile}
+            activeStep={activeStep}
+            addOnsLength={(values as FormikValues).addOns.length}
+            subscriptionType={(values as FormikValues).plan.subscription}
+        >
             <Typography
                 fontSize="30px"
                 fontWeight={700}
@@ -55,31 +82,16 @@ const FormContainer: FC<FormContainerProps> = ({
             >
                 {stepTitleConfig[activeStep].subtitle}
             </Typography>
-            <Form>{StepFormProvider({ activeStep, setActiveStep })}</Form>
-            <ButtonsContainer>
-                {activeStep > 1 && (
-                    <Button
-                        onClick={(): void => setActiveStep(activeStep - 1)}
-                        variant="subtle"
-                    >
-                        <Typography color={colors.marineBlue} fontWeight={500}>
-                            Go Back
-                        </Typography>
-                    </Button>
-                )}
-                <Button
-                    disabled={
-                        dirty ? !isValid && dirty && !isEmpty(errors) : true
-                    }
-                    onClick={(): void => setActiveStep(activeStep + 1)}
-                    variant="primary"
-                    style={{ marginLeft: 'auto' }}
-                >
-                    <Typography color={colors.white} fontWeight={500}>
-                        {activeStep !== 4 ? 'Next Step' : 'Confirm'}
-                    </Typography>
-                </Button>
-            </ButtonsContainer>
+            <Form isMobile={isMobile}>
+                {StepFormProvider({ activeStep, setActiveStep })}
+            </Form>
+            {!isMobile && (
+                <ButtonsContainer
+                    activeStep={activeStep}
+                    onClickNext={(): void => setActiveStep(activeStep + 1)}
+                    onClickPrev={(): void => setActiveStep(activeStep - 1)}
+                />
+            )}
         </Container>
     )
 }

@@ -2,6 +2,7 @@ import React, { ReactElement, useCallback, useEffect } from 'react'
 import { Checkbox } from 'rsuite'
 import styled from 'styled-components'
 import { FormikValues, useFormikContext } from 'formik'
+import { useDeviceDetect } from 'src/hooks/useDeviceDetect'
 import Card from '../UI/Card'
 import Typography from '../UI/Typography'
 import { colors } from '../../styles/theme'
@@ -18,6 +19,7 @@ const Container = styled.div`
 
 const AddOns = (): ReactElement => {
     const { values, setFieldValue } = useFormikContext()
+    const { isMobile } = useDeviceDetect()
 
     const price = (config: AddOnsConfig | AddOn): number =>
         (values as FormikValues).plan.subscription === SubscriptionType.MONTHLY
@@ -80,7 +82,7 @@ const AddOns = (): ReactElement => {
                         config.name
                     )}
                     style={{
-                        width: '450px',
+                        width: !isMobile ? '450px' : '100%',
                         height: '80px',
                         marginTop: '10px',
                         marginBottom: '10px',
@@ -104,15 +106,22 @@ const AddOns = (): ReactElement => {
                                 )}
                             />
                             <div>
-                                <Typography fontWeight={700}>
+                                <Typography
+                                    fontSize={isMobile && '14px'}
+                                    fontWeight={700}
+                                >
                                     {config.title}
                                 </Typography>
-                                <Typography color={colors.coolGray}>
+                                <Typography
+                                    fontSize={isMobile && '12px'}
+                                    color={colors.coolGray}
+                                >
                                     {config.subtitle}
                                 </Typography>
                             </div>
                         </div>
                         <Typography
+                            fontSize={isMobile && '12px'}
                             fontWeight={500}
                             color={colors.purplishBlue}
                         >

@@ -2,6 +2,7 @@ import React, { ReactElement, useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 import { Grid, Toggle } from 'rsuite'
 import { FormikValues, useFormikContext } from 'formik'
+import { useDeviceDetect } from 'src/hooks/useDeviceDetect'
 import { colors } from '../../styles/theme'
 import Icon from '../UI/Icon'
 import Typography from '../UI/Typography'
@@ -19,10 +20,12 @@ const ToggleContainer = styled.div`
     max-height: fit-content;
     background: ${colors.magnolia};
     margin-bottom: 133px;
+    border-radius: 10%;
 `
 
 const Plan = (): ReactElement => {
     const { setFieldValue, values } = useFormikContext()
+    const { isMobile } = useDeviceDetect()
 
     const handleToggleChange = useCallback(
         (checked: boolean) => {
@@ -82,13 +85,22 @@ const Plan = (): ReactElement => {
                 style={{
                     padding: 0,
                     marginTop: '36px',
-                    marginBottom: '30px',
-                    width: 'max-content',
+                    marginBottom: !isMobile ? '30px' : '8px',
+                    width: !isMobile ? 'max-content' : '100%',
                 }}
             >
                 {planConfig.map(config => (
                     <Card
-                        style={{ margin: config.margin }}
+                        style={
+                            !isMobile
+                                ? { margin: config.margin }
+                                : {
+                                      margin: 'auto',
+                                      marginBottom: '15px',
+                                      display: 'flex',
+                                      height: 'min-content',
+                                  }
+                        }
                         onClick={(): void =>
                             handleChangeCard(config.name, config.price)
                         }
@@ -98,28 +110,46 @@ const Plan = (): ReactElement => {
                         key={`${config.name}-${config.price}`}
                         yearly={yearly}
                     >
-                        <Icon icon={config.icon} />
-                        <Typography
-                            fontWeight={500}
-                            style={{ marginTop: '42px', marginBottom: '5px' }}
+                        <Icon icon={config.icon} style={{}} />
+                        <div
+                            style={
+                                isMobile
+                                    ? {
+                                          width: 'min-content',
+                                          height: 'min-content',
+                                          marginLeft: '8px',
+                                      }
+                                    : {}
+                            }
                         >
-                            {config.label}
-                        </Typography>
-                        <Typography fontSize="14px" color={colors.coolGray}>
-                            {pricePerSelected(
-                                (values as FormikValues).plan.subscription,
-                                yearly ? config.price * 10 : config.price
-                            )}
-                        </Typography>
-                        {yearly && (
                             <Typography
-                                fontSize="12px"
-                                color={colors.marineBlue}
-                                style={{ marginTop: '5px' }}
+                                fontWeight={500}
+                                style={{
+                                    marginTop: !isMobile ? '42px' : 'auto',
+                                    marginBottom: '5px',
+                                }}
                             >
-                                2 months free
+                                {config.label}
                             </Typography>
-                        )}
+                            <Typography fontSize="14px" color={colors.coolGray}>
+                                {pricePerSelected(
+                                    (values as FormikValues).plan.subscription,
+                                    yearly ? config.price * 10 : config.price
+                                )}
+                            </Typography>
+                            {yearly && (
+                                <Typography
+                                    fontSize="12px"
+                                    color={colors.marineBlue}
+                                    style={{
+                                        marginTop: '5px',
+                                        width: 'max-content',
+                                    }}
+                                >
+                                    2 months free
+                                </Typography>
+                            )}
+                        </div>
                     </Card>
                 ))}
             </Grid>

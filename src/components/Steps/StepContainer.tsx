@@ -1,5 +1,6 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
+import { useDeviceDetect } from 'src/hooks/useDeviceDetect'
 import { colors } from '../../styles/theme'
 import Typography from '../UI/Typography'
 
@@ -41,24 +42,27 @@ const StepContainer: FC<StepContainerProps> = ({
     label,
     activeStep,
 }) => {
+    const { isMobile } = useDeviceDetect()
     return (
         <Container>
             <StepNumber isActive={stepNumber === activeStep}>
                 {stepNumber}
             </StepNumber>
-            <DescriptionContainer>
-                <Typography fontSize="14px" color={colors.coolGray}>
-                    STEP {stepNumber}
-                </Typography>
-                <Typography
-                    fontSize="15px"
-                    fontWeight={700}
-                    color={colors.white}
-                    style={{ letterSpacing: '1px' }}
-                >
-                    {label}
-                </Typography>
-            </DescriptionContainer>
+            {!isMobile && (
+                <DescriptionContainer>
+                    <Typography fontSize="14px" color={colors.coolGray}>
+                        STEP {stepNumber}
+                    </Typography>
+                    <Typography
+                        fontSize="15px"
+                        fontWeight={700}
+                        color={colors.white}
+                        style={{ letterSpacing: '1px' }}
+                    >
+                        {label}
+                    </Typography>
+                </DescriptionContainer>
+            )}
         </Container>
     )
 }

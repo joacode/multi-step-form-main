@@ -2,6 +2,7 @@ import { Field, FormikErrors, FormikValues, useFormikContext } from 'formik'
 import React, { FC } from 'react'
 import { Input as RSInput } from 'rsuite'
 import styled from 'styled-components'
+import { useDeviceDetect } from 'src/hooks/useDeviceDetect'
 import { colors } from '../../styles/theme'
 import Typography from '../UI/Typography'
 import { infoConfig } from '../../constants'
@@ -25,11 +26,12 @@ const LabelContainer = styled.div`
 
 const Info: FC = () => {
     const { errors, setFieldValue, validateField, values } = useFormikContext()
+    const { isMobile } = useDeviceDetect()
 
     return infoConfig.map(config => (
         <div
             style={{
-                marginBottom: '25px',
+                marginBottom: !isMobile ? '25px' : '15px',
             }}
             key={`${config.label}-${config.type}`}
         >

@@ -55,3 +55,7 @@ export interface AddOnsConfig {
     price: number
     name: AddOnType
 }
+
+export interface MobileProps {
+    isMobile: boolean
+}

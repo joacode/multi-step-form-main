@@ -1,23 +1,35 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
+import { colors } from 'src/styles/theme'
 import StepContainer from '../Steps/StepContainer'
 import { stepContainerConfig } from '../../constants'
 
 const ImgContainer = styled.div`
-    // height: 568px;
-    // margin: auto 0px auto 16px;
-    // padding: 40px 30px;
-    // position: relative;
+    position: fixed;
+    display: flex;
+    justify-content: space-evenly;
+    width: 100%;
+    padding: 30px 100px 0 100px;
+    margin-left: auto;
 `
 
 const Img = styled.img`
-    // margin: -40px -30px;
+    width: 100%;
+    margin-top: -525px;
+`
+const Background = styled.div`
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    background: ${colors.magnolia};
+    z-index: 0;
+    margin-top: -70px;
 `
 
 const HeaderImage: FC<{ activeStep: number }> = ({ activeStep }) => {
     return (
-        <ImgContainer>
-            <div style={{ position: 'fixed' }}>
+        <>
+            <ImgContainer>
                 {stepContainerConfig.map(config => (
                     <StepContainer
                         stepNumber={config.stepNumber}
@@ -26,9 +38,10 @@ const HeaderImage: FC<{ activeStep: number }> = ({ activeStep }) => {
                         key={`${config.label}-${config.stepNumber}`}
                     />
                 ))}
-            </div>
-            <Img src="/assets/images/bg-sidebar-desktop.svg" />{' '}
-        </ImgContainer>
+            </ImgContainer>
+            <Img src="/assets/images/bg-sidebar-desktop.svg" />
+            <Background />
+        </>
     )
 }
 

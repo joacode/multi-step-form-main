@@ -22,6 +22,7 @@ const Container = styled(RSButton)<ButtonProps>`
     background: ${({ variant }): string =>
         theme.button.variant[variant].background};
     color: ${({ variant }): string => theme.button.variant[variant].color};
+    cursor: pointer;
 
     &:hover {
         background: ${({ variant }): string =>

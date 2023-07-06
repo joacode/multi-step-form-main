@@ -12,6 +12,8 @@ const Icon: FC<IconProps> = ({ icon, style }) => {
             src={`/assets/images/icon-${icon}.svg`}
             alt={`icon-${icon}`}
             style={style}
+            width={40}
+            height={40}
         />
     )
 }

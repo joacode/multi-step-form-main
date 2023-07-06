@@ -1,5 +1,6 @@
 import React, { ReactElement } from 'react'
 import styled from 'styled-components'
+import { useDeviceDetect } from 'src/hooks/useDeviceDetect'
 import Typography from '../UI/Typography'
 import Icon from '../UI/Icon'
 import { colors } from '../../styles/theme'
@@ -14,10 +15,35 @@ const Background = styled.div`
 
 const Container = styled.div``
 
+const defaultText = (): ReactElement => (
+    <p>
+        Thanks for confirming your subscription! We hope you have
+        <br />
+        fun using our platform. If you ever need support, please feel
+        <br />
+        free to email us at support@loremgaming.com
+    </p>
+)
+
+const mobileText = (): ReactElement => (
+    <p>
+        Thanks for confirming your subscription!
+        <br />
+        We hope you have fun using our
+        <br />
+        platform. If you ever need support,
+        <br />
+        please feel to email us at
+        <br />
+        support@loremgaming.com
+    </p>
+)
+
 const Greetings = (): ReactElement => {
+    const { isMobile } = useDeviceDetect()
     return (
         <Background>
-            <Container>
+            <Container style={isMobile && { margin: '80px 25px' }}>
                 <Icon
                     icon="thank-you"
                     style={{
@@ -40,20 +66,16 @@ const Greetings = (): ReactElement => {
                     Thank you!
                 </Typography>
                 <Typography
+                    lineHeight="1.3"
                     color={colors.coolGray}
                     style={{
-                        width: 'fit-content',
+                        width: 'max-content',
                         marginLeft: 'auto',
                         marginRight: 'auto',
                         textAlign: 'center',
                     }}
                 >
-                    Thanks for confirming your subscription! We hope you have
-                    <br />
-                    fun using our platform. If you ever need support, please
-                    feel
-                    <br />
-                    free to email us at support@loremgaming.com
+                    {!isMobile ? defaultText() : mobileText()}
                 </Typography>
             </Container>
         </Background>

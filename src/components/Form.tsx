@@ -1,3 +1,4 @@
+/* eslint-disable no-empty-pattern */
 import React, { ReactElement, useState } from 'react'
 import { Grid as RSGrid } from 'rsuite'
 import styled from 'styled-components'
@@ -11,10 +12,11 @@ import { SubscriptionType } from '../models'
 import Greetings from './Steps/Greetings'
 import { useDeviceDetect } from '../hooks/useDeviceDetect'
 import HeaderImage from './UI/HeaderImage'
+import ButtonsContainer from './UI/ButtonsContainer'
 
 const Container = styled(RSGrid)<{ isMobile?: boolean }>`
     max-width: 940px;
-    min-height: 600px;
+    max-height: 600px;
     margin: auto;
     margin-top: 10%;
     border-radius: 20px;
@@ -23,7 +25,13 @@ const Container = styled(RSGrid)<{ isMobile?: boolean }>`
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 
     @media (max-width: 576px) {
+        z-index: 1;
         display: block;
+        margin-left: 15px;
+        margin-right: 15px;
+        margin-top: -155px;
+        position: inherit;
+        height: auto;
     }
 `
 
@@ -60,44 +68,61 @@ const Form = (): ReactElement => {
 
     return (
         <>
-            {isMobile && <HeaderImage activeStep={activeStep} />}
-            <Container isMobile={isMobile}>
-                {!isMobile && (
-                    <ImgContainer>
-                        <div style={{ position: 'fixed' }}>
-                            {stepContainerConfig.map(config => (
-                                <StepContainer
-                                    stepNumber={config.stepNumber}
-                                    label={config.label}
-                                    activeStep={activeStep < 4 ? activeStep : 4}
-                                    key={`${config.label}-${config.stepNumber}`}
+            <Formik
+                initialValues={initialValues}
+                validationSchema={ValidationSchema}
+                validateOnChange={false}
+                validateOnBlur={false}
+                onSubmit={(): void => {
+                    setActiveStep(activeStep + 1)
+                }}
+            >
+                {({}): JSX.Element => (
+                    <>
+                        {isMobile && <HeaderImage activeStep={activeStep} />}
+                        <Container isMobile={isMobile}>
+                            {!isMobile && (
+                                <ImgContainer>
+                                    <div style={{ position: 'fixed' }}>
+                                        {stepContainerConfig.map(config => (
+                                            <StepContainer
+                                                stepNumber={config.stepNumber}
+                                                label={config.label}
+                                                activeStep={
+                                                    activeStep < 4
+                                                        ? activeStep
+                                                        : 4
+                                                }
+                                                key={`${config.label}-${config.stepNumber}`}
+                                            />
+                                        ))}
+                                    </div>
+                                    <Img src="/assets/images/bg-sidebar-desktop.svg" />{' '}
+                                </ImgContainer>
+                            )}
+                            {activeStep < 5 ? (
+                                <FormContainer
+                                    activeStep={activeStep}
+                                    setActiveStep={setActiveStep}
                                 />
-                            ))}
-                        </div>
-                        <Img src="/assets/images/bg-sidebar-desktop.svg" />{' '}
-                    </ImgContainer>
-                )}
-                <Formik
-                    initialValues={initialValues}
-                    validationSchema={ValidationSchema}
-                    validateOnChange={false}
-                    validateOnBlur={false}
-                    onSubmit={(): void => {
-                        setActiveStep(activeStep + 1)
-                    }}
-                >
-                    {({}) =>
-                        activeStep < 5 ? (
-                            <FormContainer
+                            ) : (
+                                <Greetings />
+                            )}
+                        </Container>
+                        {isMobile && activeStep < 5 && (
+                            <ButtonsContainer
                                 activeStep={activeStep}
-                                setActiveStep={setActiveStep}
+                                onClickNext={(): void =>
+                                    setActiveStep(activeStep + 1)
+                                }
+                                onClickPrev={(): void =>
+                                    setActiveStep(activeStep - 1)
+                                }
                             />
-                        ) : (
-                            <Greetings />
-                        )
-                    }
-                </Formik>
-            </Container>
+                        )}
+                    </>
+                )}
+            </Formik>
         </>
     )
 }
