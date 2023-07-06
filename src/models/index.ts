@@ -1,4 +1,4 @@
-import { CSSProperties, ReactElement } from 'react'
+import { CSSProperties } from 'react'
 
 export interface StepTitleConfig {
     [key: number]: {
@@ -9,7 +9,7 @@ export interface StepTitleConfig {
 
 export interface FormComponents {
     [key: number]: {
-        component: ReactElement
+        component: JSX.Element
     }
 }
 

@@ -8,7 +8,6 @@ import { AddOn, SubscriptionType } from '../../models'
 import { pricePerSelected } from '../../utils'
 
 interface SummaryProps {
-    activeStep: number
     setActiveStep: (activeStep: number) => void
 }
 
@@ -26,7 +25,7 @@ const ListContainer = styled.div`
     align-items: center;
 `
 
-const Summary: FC<SummaryProps> = ({ activeStep, setActiveStep }) => {
+const Summary: FC<SummaryProps> = ({ setActiveStep }) => {
     const { values } = useFormikContext()
     const [isHovering, setIsHovering] = useState(false)
 
@@ -71,9 +70,9 @@ const Summary: FC<SummaryProps> = ({ activeStep, setActiveStep }) => {
                                 width: 'fit-content',
                                 marginTop: '5px',
                             }}
-                            onClick={() => setActiveStep(2)}
-                            onMouseEnter={() => setIsHovering(true)}
-                            onMouseLeave={() => setIsHovering(false)}
+                            onClick={(): void => setActiveStep(2)}
+                            onMouseEnter={(): void => setIsHovering(true)}
+                            onMouseLeave={(): void => setIsHovering(false)}
                         >
                             Change
                         </Typography>

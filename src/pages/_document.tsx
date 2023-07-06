@@ -1,4 +1,4 @@
-/* eslint-disable @next/next/no-css-tags */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react'
 import Document, {
     Html,
@@ -17,10 +17,12 @@ class MyDocument extends Document {
         try {
             ctx.renderPage = (): void =>
                 originalRenderPage({
-                    enhanceApp:
-                        (App: any) => (props: React.JSX.IntrinsicAttributes) =>
-                            // eslint-disable-next-line react/jsx-props-no-spreading
-                            sheet.collectStyles(<App {...props} />),
+                    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+                    enhanceApp: (App: any) => (
+                        props: React.JSX.IntrinsicAttributes
+                    ) =>
+                        // eslint-disable-next-line react/jsx-props-no-spreading
+                        sheet.collectStyles(<App {...props} />),
                 })
 
             const initialProps = await Document.getInitialProps(ctx)
@@ -38,7 +40,7 @@ class MyDocument extends Document {
         }
     }
 
-    render() {
+    render(): React.JSX.Element {
         return (
             <Html>
                 <Head>

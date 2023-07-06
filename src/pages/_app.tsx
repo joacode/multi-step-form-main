@@ -1,10 +1,9 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import App, { AppContext } from 'next/app'
+import App, { AppContext, AppProps } from 'next/app'
 import Head from 'next/head'
 import React, { ReactElement } from 'react'
 import 'rsuite/dist/rsuite.min.css'
 import '../styles/globals.css'
-import type { AppProps } from 'next/app'
 
 export default function MyApp({
     Component,
@@ -13,7 +12,7 @@ export default function MyApp({
     return (
         <>
             <Head>
-                <title>Frontendmentor</title>
+                <title>Frontend-mentor</title>
             </Head>
             <Component {...pageProps} />
         </>

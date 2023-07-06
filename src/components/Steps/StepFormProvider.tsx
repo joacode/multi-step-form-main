@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
+import { FormComponents } from 'src/models'
 import Info from './Info'
 import Plan from './Plan'
-import { FormComponents } from '../../models'
 import AddOns from './AddOns'
 import Summary from './Summary'
 
@@ -21,12 +21,7 @@ const StepFormProvider: FC<StepFormProviderProps> = ({
         2: { component: <Plan /> },
         3: { component: <AddOns /> },
         4: {
-            component: (
-                <Summary
-                    activeStep={activeStep}
-                    setActiveStep={setActiveStep}
-                />
-            ),
+            component: <Summary setActiveStep={setActiveStep} />,
         },
     }
 
